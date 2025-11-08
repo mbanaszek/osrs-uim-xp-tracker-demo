@@ -1,0 +1,21 @@
+{
+  "name": "player-ranking-app",
+  "version": "1.0.0",
+  "description": "Fullstack Player Ranking Application",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "install:all": "pnpm install",
+    "start:backend": "pnpm --filter backend start:dev",
+    "start:frontend": "pnpm --filter frontend dev",
+    "test:backend": "pnpm --filter backend test",
+    "test:frontend": "pnpm --filter frontend test",
+    "seed": "pnpm --filter backend seed"
+  },
+  "author": "",
+  "license": "MIT"
+}
+
