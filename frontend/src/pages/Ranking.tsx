@@ -13,15 +13,12 @@ export default function Ranking() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Given
     setLoading(true);
     setError(null);
 
-    // When
     fetch(`http://localhost:3000/ranking?date=${date}`)
       .then((res) => res.json())
       .then((data) => {
-        // Then
         setPlayers(data);
         setLoading(false);
       })
@@ -36,6 +33,11 @@ export default function Ranking() {
   };
 
   const columns = [
+    {
+      key: 'id' as keyof Player,
+      label: '#',
+      render: (_value: number, _row: Player, index: number) => index + 1,
+    },
     { key: 'login' as keyof Player, label: 'Login' },
     {
       key: 'experience' as keyof Player,
@@ -87,7 +89,10 @@ export default function Ranking() {
 
       {loading && <div className="loading">Loading...</div>}
       {error && <div className="error">Error: {error}</div>}
-      {!loading && !error && (
+      {!loading && !error && players.length === 0 && (
+        <div className="no-data">No data available for the selected date.</div>
+      )}
+      {!loading && !error && players.length > 0 && (
         <Table data={players} columns={columns} onRowClick={handleRowClick} />
       )}
     </div>

@@ -15,6 +15,17 @@
     "test:frontend": "pnpm --filter frontend test",
     "seed": "pnpm --filter backend seed"
   },
+  "pnpm": {
+    "overrides": {
+      "@npmcli/move-file": "^2.0.1",
+      "glob": "^10.3.10",
+      "rimraf": "^5.0.5",
+      "npmlog": "^7.0.1",
+      "are-we-there-yet": "^4.0.2",
+      "gauge": "^5.0.0"
+    },
+    "onlyBuiltDependencies": ["sqlite3"]
+  },
   "author": "",
   "license": "MIT"
 }

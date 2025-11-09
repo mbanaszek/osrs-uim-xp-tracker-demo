@@ -4,5 +4,6 @@ export interface Player {
   date: string;
   experience: number;
   rankingChange: number;
+  ranking: number;
 }
 

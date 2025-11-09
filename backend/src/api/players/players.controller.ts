@@ -1,12 +1,11 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiParam } from '@nestjs/swagger';
-import { PlayerService } from './domain/player.service';
-import { Player } from './domain/player.entity';
+import { PlayersRanking, PlayerRankingView } from '../../players/players-ranking';
 
 @ApiTags('players')
 @Controller()
 export class PlayersController {
-  constructor(private readonly playerService: PlayerService) {}
+  constructor(private readonly playersRanking: PlayersRanking) {}
 
   @Get('ranking')
   @ApiOperation({ summary: 'Get daily ranking of top 50 players' })
@@ -16,12 +15,8 @@ export class PlayersController {
     type: String,
     description: 'Date in YYYY-MM-DD format. Defaults to today.',
   })
-  async getRanking(@Query('date') date?: string): Promise<Player[]> {
-    // Given
-    // When
-    const result = await this.playerService.getDailyRanking(date || '');
-
-    // Then
+  async getRanking(@Query('date') date?: string): Promise<PlayerRankingView[]> {
+    const result = await this.playersRanking.getDailyRanking(date || '');
     return result;
   }
 
@@ -37,14 +32,9 @@ export class PlayersController {
   async getPlayerRanking(
     @Param('login') login: string,
     @Query('days') days?: string,
-  ): Promise<Player[]> {
-    // Given
+  ): Promise<PlayerRankingView[]> {
     const daysNumber = days ? parseInt(days, 10) : 356;
-
-    // When
-    const result = await this.playerService.getPlayerRanking(login, daysNumber);
-
-    // Then
+    const result = await this.playersRanking.getPlayerRanking(login, daysNumber);
     return result;
   }
 }

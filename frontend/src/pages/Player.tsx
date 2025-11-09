@@ -1,7 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Table from '../components/Table';
 import { Player } from '../types';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+);
 
 export default function PlayerPage() {
   const { login } = useParams<{ login: string }>();
@@ -12,18 +31,16 @@ export default function PlayerPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Given
     if (!login) return;
 
     setLoading(true);
     setError(null);
 
-    // When
     fetch(`http://localhost:3000/player/ranking/${login}?days=${days}`)
       .then((res) => res.json())
       .then((data) => {
-        // Then
-        setPlayers(data);
+        const sorted = [...data].sort((a, b) => (a.date < b.date ? 1 : -1));
+        setPlayers(sorted);
         setLoading(false);
       })
       .catch((err) => {
@@ -33,6 +50,11 @@ export default function PlayerPage() {
   }, [login, days]);
 
   const columns = [
+    {
+      key: 'ranking' as keyof Player,
+      label: '#',
+      render: (value: number) => value,
+    },
     { key: 'date' as keyof Player, label: 'Date' },
     {
       key: 'experience' as keyof Player,
@@ -58,6 +80,43 @@ export default function PlayerPage() {
       },
     },
   ];
+
+  const chartData = useMemo(() => {
+    const chronological = [...players].reverse();
+    const labels = chronological.map((player) => player.date);
+    const rankingData = chronological.map((player) => player.ranking);
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Ranking position',
+          data: rankingData,
+          borderColor: '#007bff',
+          backgroundColor: 'rgba(0, 123, 255, 0.2)',
+          tension: 0.3,
+        },
+      ],
+    };
+  }, [players]);
+
+  const chartOptions = {
+    responsive: true,
+    interaction: { mode: 'index' as const, intersect: false },
+    stacked: false,
+    plugins: {
+      legend: { position: 'top' as const },
+    },
+    scales: {
+      y: {
+        type: 'linear' as const,
+        position: 'left' as const,
+        reverse: true,
+        ticks: {
+          precision: 0,
+        },
+      },
+    },
+  };
 
   return (
     <div className="container">
@@ -101,6 +160,11 @@ export default function PlayerPage() {
 
       {loading && <div className="loading">Loading...</div>}
       {error && <div className="error">Error: {error}</div>}
+      {!loading && !error && players.length > 0 && (
+        <div className="chart-wrapper">
+          <Line data={chartData} options={chartOptions} />
+        </div>
+      )}
       {!loading && !error && (
         <Table data={players} columns={columns} />
       )}

@@ -4,12 +4,14 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Player } from '../../src/players/domain/player.entity';
+import { Player } from '../../src/players/player.entity';
+import { PlayerRankingPerDay } from '../../src/players/player-ranking-per-day.entity';
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 
 describe('PlayersController (e2e)', () => {
   let app: INestApplication;
   let playerRepository: Repository<Player>;
+  let rankingRepository: Repository<PlayerRankingPerDay>;
 
   beforeAll(async () => {
     // Given
@@ -24,38 +26,49 @@ describe('PlayersController (e2e)', () => {
     playerRepository = moduleFixture.get<Repository<Player>>(
       getRepositoryToken(Player),
     );
+    rankingRepository = moduleFixture.get<Repository<PlayerRankingPerDay>>(
+      getRepositoryToken(PlayerRankingPerDay),
+    );
   });
 
   beforeEach(async () => {
     // Clear database before each test
+    await rankingRepository.clear();
     await playerRepository.clear();
 
     // Insert test data
-    const testPlayers: Player[] = [
-      {
-        id: 1,
-        login: 'player_001',
+    const playerOne = await playerRepository.save(
+      playerRepository.create({ login: 'player_001' }),
+    );
+    const playerTwo = await playerRepository.save(
+      playerRepository.create({ login: 'player_002' }),
+    );
+
+    const rankings: PlayerRankingPerDay[] = [
+      rankingRepository.create({
+        player: playerOne,
         date: '2024-01-01',
         experience: 50000,
         rankingChange: 10,
-      } as Player,
-      {
-        id: 2,
-        login: 'player_001',
+        ranking: 2,
+      }),
+      rankingRepository.create({
+        player: playerOne,
         date: '2024-01-02',
         experience: 51000,
         rankingChange: 15,
-      } as Player,
-      {
-        id: 3,
-        login: 'player_002',
+        ranking: 1,
+      }),
+      rankingRepository.create({
+        player: playerTwo,
         date: '2024-01-01',
         experience: 60000,
         rankingChange: -5,
-      } as Player,
+        ranking: 1,
+      }),
     ];
 
-    await playerRepository.save(testPlayers);
+    await rankingRepository.save(rankings);
   });
 
   afterAll(async () => {
@@ -77,6 +90,7 @@ describe('PlayersController (e2e)', () => {
     expect(response.body[0]).toHaveProperty('login');
     expect(response.body[0]).toHaveProperty('experience');
     expect(response.body[0]).toHaveProperty('rankingChange');
+    expect(response.body[0]).toHaveProperty('ranking');
   });
 
   it('/player/ranking/:login (GET) should return player ranking history', async () => {
@@ -96,6 +110,7 @@ describe('PlayersController (e2e)', () => {
     expect(response.body[0]).toHaveProperty('date');
     expect(response.body[0]).toHaveProperty('experience');
     expect(response.body[0]).toHaveProperty('rankingChange');
+    expect(response.body[0]).toHaveProperty('ranking');
   });
 });
 

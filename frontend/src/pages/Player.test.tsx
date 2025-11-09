@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import PlayerPage from './Player';
 
 global.fetch = vi.fn();
@@ -23,13 +23,16 @@ describe('PlayerPage', () => {
     ];
 
     (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
       json: async () => mockPlayers,
     });
 
     // When
     render(
       <MemoryRouter initialEntries={['/player/player_001']}>
-        <PlayerPage />
+        <Routes>
+          <Route path="/player/:login" element={<PlayerPage />} />
+        </Routes>
       </MemoryRouter>,
     );
 
@@ -52,13 +55,16 @@ describe('PlayerPage', () => {
     ];
 
     (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
       json: async () => mockPlayers,
     });
 
     // When
     render(
       <MemoryRouter initialEntries={['/player/player_001']}>
-        <PlayerPage />
+        <Routes>
+          <Route path="/player/:login" element={<PlayerPage />} />
+        </Routes>
       </MemoryRouter>,
     );
 

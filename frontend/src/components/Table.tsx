@@ -5,7 +5,7 @@ interface TableProps {
   columns: Array<{
     key: keyof Player;
     label: string;
-    render?: (value: any, row: Player) => React.ReactNode;
+    render?: (value: any, row: Player, index: number) => React.ReactNode;
   }>;
   onRowClick?: (row: Player) => void;
 }
@@ -21,7 +21,7 @@ export default function Table({ data, columns, onRowClick }: TableProps) {
         </tr>
       </thead>
       <tbody>
-        {data.map((row) => (
+        {data.map((row, index) => (
           <tr
             key={row.id}
             onClick={() => onRowClick?.(row)}
@@ -30,7 +30,7 @@ export default function Table({ data, columns, onRowClick }: TableProps) {
             {columns.map((column) => (
               <td key={column.key}>
                 {column.render
-                  ? column.render(row[column.key], row)
+                  ? column.render(row[column.key], row, index)
                   : row[column.key]}
               </td>
             ))}

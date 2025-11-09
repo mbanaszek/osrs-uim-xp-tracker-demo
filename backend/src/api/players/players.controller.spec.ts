@@ -1,32 +1,23 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { PlayersController } from './players.controller';
-import { PlayerService } from './domain/player.service';
-import { Player } from './domain/player.entity';
+import { PlayersRanking, PlayerRankingView } from '../../players/players-ranking';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+global.fetch = vi.fn();
 
 describe('PlayersController', () => {
   let controller: PlayersController;
-  let service: PlayerService;
-
-  const mockPlayerService = {
-    getDailyRanking: vi.fn(),
-    getPlayerRanking: vi.fn(),
+  let mockPlayerService: {
+    getDailyRanking: ReturnType<typeof vi.fn>;
+    getPlayerRanking: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
-    // Given
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [PlayersController],
-      providers: [
-        {
-          provide: PlayerService,
-          useValue: mockPlayerService,
-        },
-      ],
-    }).compile();
+    mockPlayerService = {
+      getDailyRanking: vi.fn(),
+      getPlayerRanking: vi.fn(),
+    };
 
-    controller = module.get<PlayersController>(PlayersController);
-    service = module.get<PlayerService>(PlayerService);
+    controller = new PlayersController(mockPlayerService as unknown as PlayersRanking);
   });
 
   it('should be defined', () => {
@@ -37,14 +28,15 @@ describe('PlayersController', () => {
   it('should get ranking', async () => {
     // Given
     const date = '2024-01-01';
-    const mockPlayers: Player[] = [
+    const mockPlayers: PlayerRankingView[] = [
       {
         id: 1,
         login: 'player_001',
         date: '2024-01-01',
         experience: 50000,
         rankingChange: 10,
-      } as Player,
+        ranking: 1,
+      },
     ];
 
     mockPlayerService.getDailyRanking.mockResolvedValue(mockPlayers);
@@ -61,14 +53,15 @@ describe('PlayersController', () => {
     // Given
     const login = 'player_001';
     const days = '356';
-    const mockPlayers: Player[] = [
+    const mockPlayers: PlayerRankingView[] = [
       {
         id: 1,
         login: 'player_001',
         date: '2024-01-01',
         experience: 50000,
         rankingChange: 10,
-      } as Player,
+        ranking: 1,
+      },
     ];
 
     mockPlayerService.getPlayerRanking.mockResolvedValue(mockPlayers);

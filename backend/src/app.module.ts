@@ -1,16 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PlayersModule } from './players/players.module';
-import { Player } from './players/domain/player.entity';
+import { PlayersModule } from './api/players/players.module';
+import { dataSource } from '../database.config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: './data/database.sqlite',
-      entities: [Player],
-      synchronize: true,
-      logging: false,
+      ...dataSource.options,
     }),
     PlayersModule,
   ],
