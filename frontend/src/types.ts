@@ -3,7 +3,6 @@ export interface Player {
   login: string;
   date: string;
   experience: number;
-  rankingChange: number;
-  ranking: number;
+  ranking: number | null;
 }
 

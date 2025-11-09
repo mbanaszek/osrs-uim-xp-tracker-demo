@@ -34,33 +34,16 @@ export default function Ranking() {
 
   const columns = [
     {
-      key: 'id' as keyof Player,
+      key: 'ranking' as keyof Player,
       label: '#',
-      render: (_value: number, _row: Player, index: number) => index + 1,
+      render: (value: number | null, _row: Player, index: number) =>
+        value ?? index + 1,
     },
     { key: 'login' as keyof Player, label: 'Login' },
     {
       key: 'experience' as keyof Player,
       label: 'Experience',
       render: (value: number) => value.toLocaleString(),
-    },
-    {
-      key: 'rankingChange' as keyof Player,
-      label: 'Ranking Change',
-      render: (value: number) => {
-        const className =
-          value > 0
-            ? 'badge badge-positive'
-            : value < 0
-            ? 'badge badge-negative'
-            : 'badge badge-neutral';
-        return (
-          <span className={className}>
-            {value > 0 ? '+' : ''}
-            {value}
-          </span>
-        );
-      },
     },
   ];
 

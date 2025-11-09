@@ -19,7 +19,7 @@ describe('Ranking', () => {
         login: 'player_001',
         date: '2024-01-01',
         experience: 50000,
-        rankingChange: 10,
+        ranking: 1,
       },
     ];
 
@@ -48,7 +48,7 @@ describe('Ranking', () => {
         login: 'player_001',
         date: '2024-01-01',
         experience: 50000,
-        rankingChange: 10,
+        ranking: 1,
       },
     ];
 

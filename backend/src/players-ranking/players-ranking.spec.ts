@@ -26,11 +26,6 @@ describe('Players rankings', () => {
     service = module.get<PlayersRanking>(PlayersRanking);
   });
 
-  it('should be defined', () => {
-    // Then
-    expect(service).toBeDefined();
-  });
-
   it('should get daily ranking', async () => {
     // Given
     const date = '2024-01-01';
@@ -40,7 +35,6 @@ describe('Players rankings', () => {
         player: { id: 1, login: 'player_001', rankings: [] } as any,
         date: '2024-01-01',
         experience: 50000,
-        rankingChange: 10,
         ranking: 1,
       } as PlayerRankingPerDay,
     ];
@@ -57,7 +51,6 @@ describe('Players rankings', () => {
         login: 'player_001',
         date: '2024-01-01',
         experience: 50000,
-        rankingChange: 10,
         ranking: 1,
       },
     ];
@@ -80,7 +73,6 @@ describe('Players rankings', () => {
         player: { id: 1, login: 'player_001', rankings: [] } as any,
         date: '2024-01-01',
         experience: 50000,
-        rankingChange: 10,
         ranking: 5,
       } as PlayerRankingPerDay,
     ];
@@ -97,7 +89,6 @@ describe('Players rankings', () => {
         login: 'player_001',
         date: '2024-01-01',
         experience: 50000,
-        rankingChange: 10,
         ranking: 5,
       },
     ]);

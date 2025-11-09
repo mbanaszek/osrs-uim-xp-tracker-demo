@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Player } from '../../src/players/player.entity';
-import { PlayerRankingPerDay } from '../../src/players/player-ranking-per-day.entity';
+import { Player } from '@/players-ranking/player.entity';
+import { PlayerRankingPerDay } from '@/players-ranking/player-ranking-per-day.entity';
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 
 describe('PlayersController (e2e)', () => {
@@ -49,21 +49,18 @@ describe('PlayersController (e2e)', () => {
         player: playerOne,
         date: '2024-01-01',
         experience: 50000,
-        rankingChange: 10,
         ranking: 2,
       }),
       rankingRepository.create({
         player: playerOne,
         date: '2024-01-02',
         experience: 51000,
-        rankingChange: 15,
         ranking: 1,
       }),
       rankingRepository.create({
         player: playerTwo,
         date: '2024-01-01',
         experience: 60000,
-        rankingChange: -5,
         ranking: 1,
       }),
     ];
@@ -89,7 +86,6 @@ describe('PlayersController (e2e)', () => {
     expect(response.body.length).toBeGreaterThan(0);
     expect(response.body[0]).toHaveProperty('login');
     expect(response.body[0]).toHaveProperty('experience');
-    expect(response.body[0]).toHaveProperty('rankingChange');
     expect(response.body[0]).toHaveProperty('ranking');
   });
 
@@ -109,7 +105,6 @@ describe('PlayersController (e2e)', () => {
     expect(response.body[0].login).toBe(login);
     expect(response.body[0]).toHaveProperty('date');
     expect(response.body[0]).toHaveProperty('experience');
-    expect(response.body[0]).toHaveProperty('rankingChange');
     expect(response.body[0]).toHaveProperty('ranking');
   });
 });

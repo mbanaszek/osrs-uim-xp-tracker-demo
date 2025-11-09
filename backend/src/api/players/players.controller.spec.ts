@@ -1,5 +1,5 @@
 import { PlayersController } from './players.controller';
-import { PlayersRanking, PlayerRankingView } from '../../players/players-ranking';
+import { PlayersRanking, PlayerRankingView } from '@/players-ranking/players-ranking';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 global.fetch = vi.fn();
@@ -20,11 +20,6 @@ describe('PlayersController', () => {
     controller = new PlayersController(mockPlayerService as unknown as PlayersRanking);
   });
 
-  it('should be defined', () => {
-    // Then
-    expect(controller).toBeDefined();
-  });
-
   it('should get ranking', async () => {
     // Given
     const date = '2024-01-01';
@@ -34,7 +29,6 @@ describe('PlayersController', () => {
         login: 'player_001',
         date: '2024-01-01',
         experience: 50000,
-        rankingChange: 10,
         ranking: 1,
       },
     ];
@@ -59,7 +53,6 @@ describe('PlayersController', () => {
         login: 'player_001',
         date: '2024-01-01',
         experience: 50000,
-        rankingChange: 10,
         ranking: 1,
       },
     ];

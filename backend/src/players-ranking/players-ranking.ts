@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { PlayerRankingPerDay } from './player-ranking-per-day.entity';
+import { mapDateToDateString } from '@/utils/date-formatter';
 
 export interface PlayerRankingView {
   id: number;
   login: string;
   date: string;
   experience: number;
-  rankingChange: number;
-  ranking: number;
+  ranking: number | null;
 }
 
 @Injectable()
@@ -19,19 +19,8 @@ export class PlayersRanking {
     private playerRankingRepository: Repository<PlayerRankingPerDay>,
   ) {}
 
-  private toView(ranking: PlayerRankingPerDay): PlayerRankingView {
-    return {
-      id: ranking.id,
-      login: ranking.player.login,
-      date: ranking.date,
-      experience: ranking.experience,
-      rankingChange: ranking.rankingChange ?? 0,
-      ranking: ranking.ranking,
-    };
-  }
-
   async getDailyRanking(date: string): Promise<PlayerRankingView[]> {
-    const targetDate = date || new Date().toISOString().split('T')[0];
+    const targetDate = date || mapDateToDateString(new Date());
 
     const rankings = await this.playerRankingRepository.find({
       where: { date: targetDate },
@@ -64,6 +53,16 @@ export class PlayersRanking {
     });
 
     return rankings.map((ranking) => this.toView(ranking));
+  }
+
+  private toView(ranking: PlayerRankingPerDay): PlayerRankingView {
+    return {
+      id: ranking.id,
+      login: ranking.player.login,
+      date: ranking.date,
+      experience: ranking.experience,
+      ranking: ranking.ranking ?? null,
+    };
   }
 }
 

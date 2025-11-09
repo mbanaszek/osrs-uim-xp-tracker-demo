@@ -53,7 +53,7 @@ export default function PlayerPage() {
     {
       key: 'ranking' as keyof Player,
       label: '#',
-      render: (value: number) => value,
+      render: (value: number | null) => (value ?? '—'),
     },
     { key: 'date' as keyof Player, label: 'Date' },
     {
@@ -61,30 +61,14 @@ export default function PlayerPage() {
       label: 'Experience',
       render: (value: number) => value.toLocaleString(),
     },
-    {
-      key: 'rankingChange' as keyof Player,
-      label: 'Ranking Change',
-      render: (value: number) => {
-        const className =
-          value > 0
-            ? 'badge badge-positive'
-            : value < 0
-            ? 'badge badge-negative'
-            : 'badge badge-neutral';
-        return (
-          <span className={className}>
-            {value > 0 ? '+' : ''}
-            {value}
-          </span>
-        );
-      },
-    },
   ];
 
   const chartData = useMemo(() => {
     const chronological = [...players].reverse();
     const labels = chronological.map((player) => player.date);
-    const rankingData = chronological.map((player) => player.ranking);
+    const rankingData = chronological.map((player) =>
+      player.ranking === null ? null : player.ranking,
+    );
     return {
       labels,
       datasets: [
@@ -94,6 +78,7 @@ export default function PlayerPage() {
           borderColor: '#007bff',
           backgroundColor: 'rgba(0, 123, 255, 0.2)',
           tension: 0.3,
+          spanGaps: true,
         },
       ],
     };

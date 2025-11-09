@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { PlayerRankingPerDay } from './player-ranking-per-day.entity';
 
-@Entity('players')
+@Entity('players-ranking')
 export class Player {
   @PrimaryGeneratedColumn()
   id: number;

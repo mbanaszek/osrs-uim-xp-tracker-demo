@@ -26,9 +26,6 @@ export class PlayerRankingPerDay {
   @Column('integer')
   experience: number;
 
-  @Column('integer')
-  ranking: number;
-
-  @Column('integer', { name: 'ranking_change', nullable: true })
-  rankingChange: number;
+  @Column('integer', { nullable: true })
+  ranking: number | null;
 }

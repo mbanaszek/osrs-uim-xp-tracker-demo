@@ -1,6 +1,11 @@
-# 🎮 Player Ranking App
+# 🧙‍♂️ OSRS Ultimate Ironman XP Tracker
 
-Fullstack application for displaying daily player rankings.
+A web app that lets you explore the progress of the top **Ultimate Ironman** players in **Old School RuneScape (OSRS)**.  
+It tracks changes on the official leaderboard, records how each player’s **total XP** evolves over time,  
+and visualizes everything in a clean, interactive **Next.js** interface.
+
+You can browse live stats, see historical XP trends, and follow how the top players compete for the highest ranks.
+
 
 ## 🧱 Stack
 
@@ -96,15 +101,15 @@ rm -rf node_modules pnpm-lock.yaml
 pnpm install
 ```
 
-### 3️⃣ Data Seeder
+### 3️⃣ Load Sample Data
 
 ```bash
 # From project root
-pnpm run seed
+pnpm run load-sample-data
 
 # Or directly from backend folder
 cd backend
-pnpm run seed
+pnpm run load-sample-data
 ```
 
 The seeder generates random data for 100 players over the last 365 days.
@@ -136,6 +141,22 @@ pnpm run dev
 ```
 
 Frontend runs on: `http://localhost:5173`
+
+### 6️⃣ Fetch Today’s Leaderboard (Optional)
+
+Need fresh data straight from the official Ultimate Ironman leaderboard?
+
+```bash
+# From project root
+pnpm run fetch-today-players-ranking
+
+# Or directly from backend folder
+cd backend
+pnpm run fetch-today-players-ranking
+```
+
+This command scrapes the live leaderboard (pages 1 & 2) and records the latest
+XP values for the current day.
 
 ---
 

@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm';
 import * as path from 'path';
 import * as fs from 'fs';
-import { Player } from './src/players/player.entity';
-import { PlayerRankingPerDay } from './src/players/player-ranking-per-day.entity';
+import { Player } from '@/players-ranking/player.entity';
+import { PlayerRankingPerDay } from '@/players-ranking/player-ranking-per-day.entity';
 
 const dataDir = path.resolve(process.cwd(), 'data');
 
