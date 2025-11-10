@@ -6,6 +6,11 @@ and visualizes everything in a clean, interactive **Next.js** interface.
 
 You can browse live stats, see historical XP trends, and follow how the top players compete for the highest ranks.
 
+<p align="center">
+  <img src="./docs/leaderboard-overview.png" alt="Leaderboard overview" width="48%" style="max-width: 420px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-right: 1.5%;">
+  <img src="./docs/player-history.png" alt="Player history charts" width="48%" style="max-width: 420px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+</p>
+
 
 ## 🧱 Stack
 
