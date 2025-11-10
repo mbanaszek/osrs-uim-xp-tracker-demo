@@ -63,7 +63,7 @@ export default function PlayerPage() {
     },
   ];
 
-  const chartData = useMemo(() => {
+  const rankingChartData = useMemo(() => {
     const chronological = [...players].reverse();
     const labels = chronological.map((player) => player.date);
     const rankingData = chronological.map((player) =>
@@ -84,7 +84,25 @@ export default function PlayerPage() {
     };
   }, [players]);
 
-  const chartOptions = {
+  const experienceChartData = useMemo(() => {
+    const chronological = [...players].reverse();
+    const labels = chronological.map((player) => player.date);
+    const experienceData = chronological.map((player) => player.experience);
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Experience',
+          data: experienceData,
+          borderColor: '#28a745',
+          backgroundColor: 'rgba(40, 167, 69, 0.2)',
+          tension: 0.3,
+        },
+      ],
+    };
+  }, [players]);
+
+  const rankingChartOptions = {
     responsive: true,
     interaction: { mode: 'index' as const, intersect: false },
     stacked: false,
@@ -98,6 +116,25 @@ export default function PlayerPage() {
         reverse: true,
         ticks: {
           precision: 0,
+        },
+      },
+    },
+  };
+
+  const experienceChartOptions = {
+    responsive: true,
+    interaction: { mode: 'index' as const, intersect: false },
+    stacked: false,
+    plugins: {
+      legend: { position: 'top' as const },
+    },
+    scales: {
+      y: {
+        type: 'linear' as const,
+        position: 'left' as const,
+        ticks: {
+          callback: (value: string | number) =>
+            typeof value === 'number' ? value.toLocaleString() : value,
         },
       },
     },
@@ -146,8 +183,15 @@ export default function PlayerPage() {
       {loading && <div className="loading">Loading...</div>}
       {error && <div className="error">Error: {error}</div>}
       {!loading && !error && players.length > 0 && (
-        <div className="chart-wrapper">
-          <Line data={chartData} options={chartOptions} />
+        <div className="charts-stack">
+          <div className="chart-wrapper">
+            <h2>Ranking Position Over Time</h2>
+            <Line data={rankingChartData} options={rankingChartOptions} />
+          </div>
+          <div className="chart-wrapper">
+            <h2>Experience Over Time</h2>
+            <Line data={experienceChartData} options={experienceChartOptions} />
+          </div>
         </div>
       )}
       {!loading && !error && (
